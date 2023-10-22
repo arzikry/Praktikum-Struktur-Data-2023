@@ -1,0 +1,111 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct dtnilai {
+    char nrp[10];
+    char nama[20];
+    double nilai; // Menggunakan tipe data double untuk satu nilai
+    char alamat[30];
+    double Ip;
+    struct dtnilai *next;
+};
+
+struct dtnilai *ujung = NULL;
+
+void sisip_awal_FIFO() {
+    struct dtnilai *tampung;
+    int j = 0;
+    char jawab[2];
+
+    while (1) {
+        struct dtnilai *awal = (struct dtnilai*)malloc(sizeof(struct dtnilai));
+        fflush(stdin);
+        printf("NRP: ");
+        scanf("%s", awal->nrp);
+        printf("Nama: ");
+        scanf("%s", awal->nama);
+        
+        // Memasukkan satu nilai ke dalam variabel nilai
+        printf("Masukkan Nilai Test: ");
+        scanf("%lf", &awal->nilai);
+
+        printf("Alamat: ");
+        scanf("%s", awal->alamat);
+        printf("Indeks Prestasi: ");
+        scanf("%lf", &awal->Ip);
+        awal->next = NULL;
+
+        if (j == 0) {
+            ujung = awal;
+            tampung = ujung;
+        } else {
+            tampung->next = awal;
+            tampung = tampung->next;
+        }
+
+        printf("Ada data lagi (y/t): ");
+        scanf("%s", jawab);
+        if (strcmp(jawab, "Y") == 0 || strcmp(jawab, "y") == 0) {
+            j++;
+            continue;
+        } else if (strcmp(jawab, "T") == 0 || strcmp(jawab, "t") == 0)
+            break;
+    }
+}
+
+void hapus_simpul_tertentu() {
+    struct dtnilai *hapus;
+    struct dtnilai *sblhapus;
+    char cari[20];
+
+    if (ujung == NULL) {
+        printf("List Belum Terbentuk. Buatlah Dulu!\n");
+    } else {
+        printf("Data yang akan dihapus? (nama) : ");
+        scanf("%s", cari);
+
+        hapus = ujung;
+
+        if (strcmp(hapus->nama, cari) == 0) {
+            ujung = ujung->next;
+            free(hapus);
+        } else {
+            while (strcmp(hapus->nama, cari) != 0) {
+                sblhapus = hapus;
+                hapus = hapus->next;
+            }
+
+            if (hapus->next == NULL) {
+                sblhapus->next = NULL;
+                free(hapus);
+            } else {
+                sblhapus->next = hapus->next;
+                free(hapus);
+            }
+        }
+    }
+}
+
+void tampil_list() {
+    struct dtnilai *tampil;
+    printf("Data Mahasiswa yang telah diinputkan:\n");
+    printf("NRP\tNama\tNilai\tAlamat\tIP\n");
+
+    tampil = ujung;
+
+    while (tampil != NULL) {
+        printf("%s\t%s\t%.2lf\t%s\t%.2lf\n",
+               tampil->nrp, tampil->nama, tampil->nilai,
+               tampil->alamat, tampil->Ip);
+        tampil = tampil->next;
+    }
+}
+
+int main() {
+    sisip_awal_FIFO();
+    hapus_simpul_tertentu();
+    tampil_list();
+
+    return 0;
+}
