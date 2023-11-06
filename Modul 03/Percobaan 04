@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Deklarasi dari simpul
+struct DoubleLinkedNode
+{
+    int bil;
+    struct DoubleLinkedNode *back;
+    struct DoubleLinkedNode *next;
+};
+struct DoubleLinkedNode *head, *tail;
+
+void bentuk_awal() {
+    struct DoubleLinkedNode *awal;
+    int j = 0;
+    char jawab[2];
+    while (1)
+    {
+        awal = (struct DoubleLinkedNode*)malloc(sizeof(struct DoubleLinkedNode));
+        printf("Masukkan bilangan: ");
+        scanf("%d", &awal->bil);
+        if (j == 0)
+        {
+            awal->next = NULL;
+            awal->back = NULL;
+            head = awal;
+            tail = awal;
+        }
+        else
+        {
+            tail->next = awal;
+            awal->next = NULL;
+            awal->back = tail;
+            tail = awal;
+        }
+        printf("Ada data lagi (y/t): ");
+        scanf("%s", jawab);
+        if ((strcmp(jawab, "Y") == 0) || (strcmp(jawab, "y") == 0))
+        {
+            j++;
+            continue;
+        }
+        else if ((strcmp(jawab, "T") == 0) || (strcmp(jawab, "t") == 0))
+            break;
+    }
+}
+
+void tampil_list_fifo()
+{
+    struct DoubleLinkedNode *fifo;
+    printf("Data Bilangan yang Telah Diinputkan secara FIFO :\n");
+    fifo = head;
+    while (fifo != NULL)
+    {
+        printf("%d\t", fifo->bil);
+        fifo = fifo->next;
+    }
+    printf("\n");
+}
+
+void hapus_simpul()
+{
+    int num;
+    struct DoubleLinkedNode *sbl, *hapus, *stl;
+    printf("Masukkan data yang akan dihapus : ");
+    scanf("%d", &num);
+    hapus = head;
+
+    while (hapus != NULL) {
+        if (hapus->bil == num) {
+            sbl = hapus->back;
+            stl = hapus->next;
+
+            if (sbl != NULL) {
+                sbl->next = stl;
+            } else {
+                head = stl;
+            }
+
+            if (stl != NULL) {
+                stl->back = sbl;
+            } else {
+                tail = sbl;
+            }
+
+            free(hapus);
+            return;
+        }
+        hapus = hapus->next;
+    }
+
+    printf("Data dengan nilai %d tidak ditemukan.\n");
+}
+
+int main()
+{
+    bentuk_awal();
+    hapus_simpul();
+    tampil_list_fifo();
+    getchar(); 
+    return 0;
+}
