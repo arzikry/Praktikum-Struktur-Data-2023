@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct DoubleLinkedNode
+{
+    int bil;
+    struct DoubleLinkedNode *back;
+    struct DoubleLinkedNode *next;
+};
+struct DoubleLinkedNode *head, *tail;
+
+void bentuk_awal()
+{
+    struct DoubleLinkedNode *awal;
+    int j = 0;
+    char jawab[2];
+    while (1)
+    {
+        awal = malloc(sizeof(struct DoubleLinkedNode));
+        printf("Masukkan bilangan: ");
+        scanf("%d", &awal->bil);
+        if (j == 0)
+        {
+            awal->next = NULL;
+            awal->back = NULL;
+            head = awal;
+            tail = awal;
+        }
+        else
+        {
+            tail->next = awal;
+            awal->next = NULL;
+            awal->back = tail;
+            tail = awal;
+        }
+        printf("Ada data lagi (y/t): ");
+        scanf("%s", jawab);
+        if ((strcmp(jawab, "Y") == 0) || (strcmp(jawab, "y") == 0))
+        {
+            j++;
+            continue;
+        }
+        else if ((strcmp(jawab, "T") == 0) || (strcmp(jawab, "t") == 0))
+            break;
+    }
+}
+
+void tampil_list_lifo()
+{
+    struct DoubleLinkedNode *lifo;
+    printf("Data Bilangan yang Telah Diinputkan secara LIFO:\n");
+    lifo = tail;
+    while (lifo != NULL)
+    {
+        printf("%d\t", lifo->bil);
+        lifo = lifo->back;
+    }
+    printf("\n");
+}
+
+int main()
+{
+    bentuk_awal();
+    tampil_list_lifo();
+    getchar(); 
+    return 0;
+}
