@@ -1,0 +1,62 @@
+#include <stdio.h>
+
+#define MAXSTACK 5
+
+typedef int ItemType;
+
+/* Definisi struktur stack */
+typedef struct {
+    ItemType Items[MAXSTACK];
+    int Count; /* menunjukkan indeks data paling atas dari stack */
+} Stack;
+
+void InitializeStack(Stack *S) {
+    S->Count = 0;
+}
+
+int Empty(Stack *S) {
+    return (S->Count == 0);
+}
+
+int Full(Stack *S) {
+    return (S->Count == MAXSTACK);
+}
+
+void Push(ItemType x, Stack *S) {
+    if (Full(S)) {
+        printf("Stack penuh! Data tidak dapat masuk!\n");
+    } else {
+        S->Items[S->Count] = x;
+        ++(S->Count);
+    }
+}
+
+ItemType Pop(Stack *S) {
+    if (Empty(S)) {
+        printf("Stack masih kosong!\n");
+        return -1; /* Nilai kembalian khusus untuk menandakan kesalahan */
+    } else {
+        --(S->Count);
+        return (S->Items[S->Count]);
+    }
+}
+
+int main() {
+    int i, input;
+    Stack tumpukan;
+
+    InitializeStack(&tumpukan);
+
+    for (i = 0; i < MAXSTACK; i++) {
+        printf("Masukkan isi stack ke-%d: ", i + 1);
+        scanf("%d", &input);
+        Push(input, &tumpukan);
+    }
+
+    printf("\nMengeluarkan isi stack:\n");
+    for (i = 0; i < MAXSTACK; i++) {
+        printf("Isi stack ke-%d: %d\n", i + 1, Pop(&tumpukan));
+    }
+
+    return 0;
+}
